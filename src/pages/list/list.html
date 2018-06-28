@@ -3,21 +3,24 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>List</ion-title>
+    <ion-title>Device List</ion-title>
+    <ion-buttons end>
+      <button color="primary" ion-button (click)="newDevice()">Add new device</button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
   <ion-list>
-    <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
-      <ion-icon [name]="item.icon" item-start></ion-icon>
-      {{item.title}}
-      <div class="item-note" item-end>
-        {{item.note}}
-      </div>
-    </button>
+     <ion-item *ngFor="let item of deviceList" >
+
+        <h1 (click)="selectDevice($event, item)"> {{item.deviceTitle}}</h1>
+        <div  (click)="selectDevice($event, item)"  class="item-note">
+          {{item.deviceURL}}
+        </div>
+
+      <button ion-button large clear item-end (click)="editDevice($event, item)">Edit</button>
+     </ion-item>
   </ion-list>
-  <div *ngIf="selectedItem" padding>
-    You navigated here from <b>{{selectedItem.title}}</b>
-  </div>
+
 </ion-content>

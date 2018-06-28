@@ -3,7 +3,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Remote Pi</ion-title>
+    <ion-title>Remote Pi {{this.target_device_URL}}</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -56,7 +56,7 @@
           <ion-input type="text" [(ngModel)]="this.delta_t" ></ion-input>
         </ion-item>
         <ion-item>
-          
+
           <ion-range min="0" max="50" step="1" pin="true" snaps="true" [(ngModel)]="warmth" color="danger">
             <ion-icon range-left small color="primary" name="thermometer"></ion-icon>
             <ion-icon range-right color="danger" name="thermometer"></ion-icon>
