@@ -24,7 +24,7 @@ export class HomePage {
           //console.log ('saving config : ' + JSON.stringify(navigation_data) );
           this.AppConfig = navigation_data;
           this.dataService.saveLocalAppconfig(this.AppConfig);
-          this.connectToDevice (this.AppConfig);
+          this.connectToDevice ();
     }
 
 
