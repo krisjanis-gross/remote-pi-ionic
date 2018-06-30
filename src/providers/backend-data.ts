@@ -18,33 +18,30 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 export class BackendData {
 
-  public ServerURL = "adf";
+  public ServerURL:string;
+  public ServerKEY: string;
   private _options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
   public ServerURLDefault = "http://localhost";
 
   constructor(public http: Http, private storage: Storage) {
 
-    this.ServerURL = "adf";
+
     // Or to get a key/value pair
 
   }
 
+checkDeviceVersion() {
+  let post_parameters = {
+    request_action: "version_check",
+    request_data: ""
+  };
 
+  console.log ('trying to call version_check from ' + this.ServerURL);
 
-  getServerURL () {
-    return this.storage.get('storedServerURL');
+  //return   this.http.post(this.ServerURL + '/print_app_API.php', JSON.stringify(post_parameters), headers)
+  return   this.http.post(this.ServerURL + '/v2/json_API_v2.php', JSON.stringify(post_parameters))
+                        .map(data => data.json())
+                        .toPromise();
   }
-
-  setServerURL(val) {
-    if (val != '' && val != null ) {
-        this.ServerURL = val;
-    }
-    else {
-      this.ServerURL = this.ServerURLDefault;
-    }
-
-
-  }
-
 
 }

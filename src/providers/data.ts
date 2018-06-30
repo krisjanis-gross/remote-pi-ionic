@@ -14,20 +14,20 @@ export class Data {
 
   }
 
-  getData() {
+  getDeviceList() {
     return this.storage.get('deviceList');
   }
 
-  save(data){
+  saveDeviceList(data){
     this.storage.set('deviceList', data);
   }
 
-  getRuntimeData () {
-    return this.storage.get('runtimeData');
+  getLocalAppconfig () {
+    return this.storage.get('LocalAppconfig');
 
   }
 
-  saveRuntimeData(data) {
-    this.storage.set('runtimeData', data);
+  saveLocalAppconfig(data) {
+    this.storage.set('LocalAppconfig', data);
   }
 }

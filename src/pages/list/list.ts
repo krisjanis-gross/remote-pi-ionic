@@ -16,7 +16,7 @@ export class ListPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public dataService: Data,public modalCtrl: ModalController) {
 
-    this.dataService.getData().then((local_data) => {
+    this.dataService.getDeviceList().then((local_data) => {
 
           if(local_data){
             this.deviceList = local_data;
@@ -42,10 +42,8 @@ export class ListPage {
 
   savemodifyItem(item2) {
     var editIndex = this.deviceList.indexOf(this.selecteditem);
-
-      this.deviceList[editIndex] = item2;
-      this.dataService.save(this.deviceList);
-
+    this.deviceList[editIndex] = item2;
+    this.dataService.saveDeviceList(this.deviceList);
   }
 
 
@@ -60,12 +58,11 @@ export class ListPage {
     });
 
     addModal.present();
-
   }
 
 saveNewItem(item) {
-     this.deviceList.push(item);
-     this.dataService.save(this.deviceList);
+    this.deviceList.push(item);
+    this.dataService.saveDeviceList(this.deviceList);
 }
 
 selectDevice(event, item) {
