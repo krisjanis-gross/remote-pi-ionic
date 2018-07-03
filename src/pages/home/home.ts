@@ -13,9 +13,14 @@ import { ListPage } from '../list/list';
 export class HomePage {
   status_message:string;
   targetDeviceName: string;
+
   warmth: number;
   delta_t: number;
+
   AppConfig: any;
+  dataTimestamp:any;
+  SensorList: Array<{sensorID:string, sensor_name: string, value:string}> = [];
+
   constructor(public navCtrl: NavController, private backendData: BackendData,public dataService: Data, public navParams: NavParams) {
   //console.log ('navparams : ' + JSON.stringify(this.navParams) );
 
@@ -74,4 +79,20 @@ checkDeviceVersion() {
 
 }
 
+getRealtimeData (){
+  this.backendData.getRealtimeData().then(data => {
+                                                       this.status_message = JSON.stringify(data.response_code);
+                                                       this.sensorData = data.response_data.data;
+                                                      console.log(JSON.stringify(data.response_data.data));
+                                                      this.SensorList = data.response_data.data
+                                                       this.dataTimestamp = data.response_data.timestamp;
+
+                                                     },
+                                             err => {
+                                                       console.log(err);
+                                                       this.status_message = JSON.stringify(err);
+                                                   },
+                                           );
+
+}
 }
