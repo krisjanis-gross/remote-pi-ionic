@@ -5,6 +5,7 @@ import {BackendData} from '../../providers/backend-data';
 import { Data } from '../../providers/data';
 
 import { ListPage } from '../list/list';
+import { SensorDataPage } from '../sensor-data/sensor-data';
 
 @Component({
   selector: 'page-home',
@@ -82,9 +83,8 @@ checkDeviceVersion() {
 getRealtimeData (){
   this.backendData.getRealtimeData().then(data => {
                                                        this.status_message = JSON.stringify(data.response_code);
-                                                       this.sensorData = data.response_data.data;
-                                                      console.log(JSON.stringify(data.response_data.data));
-                                                      this.SensorList = data.response_data.data
+                                                       console.log(JSON.stringify(data.response_data.data));
+                                                       this.SensorList = data.response_data.data
                                                        this.dataTimestamp = data.response_data.timestamp;
 
                                                      },
@@ -95,4 +95,13 @@ getRealtimeData (){
                                            );
 
 }
+
+openSensorData (event, item)  {
+      this.navCtrl.push(SensorDataPage, {
+          selectedSensor: item
+        });
+
+}
+
+
 }

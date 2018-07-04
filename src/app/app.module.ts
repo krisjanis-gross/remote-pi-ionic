@@ -6,6 +6,7 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import { DeviceDataPage } from '../pages/device-data/device-data';
+import { SensorDataPage } from '../pages/sensor-data/sensor-data';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -21,7 +22,8 @@ import { Data } from '../providers/data';
     MyApp,
     HomePage,
     ListPage,
-    DeviceDataPage
+    DeviceDataPage,
+    SensorDataPage
   ],
   imports: [
     BrowserModule,
@@ -34,7 +36,8 @@ import { Data } from '../providers/data';
     MyApp,
     HomePage,
     ListPage,
-    DeviceDataPage
+    DeviceDataPage,
+    SensorDataPage
   ],
   providers: [
     StatusBar,
