@@ -15,17 +15,15 @@
     </ion-card-content>
   </ion-card>
 
-<h3>Sensor list</h3> <button color="primary" ion-button (click)="getRealtimeData()">refresh sensor list</button>
+<h3>Sensor list</h3>
 <ion-list>
   <button ion-item *ngFor="let item of SensorList" (click)="openSensorData($event, item)">
-    <h1> {{item.sensor_name}}</h1>
-    <ion-badge item-end>
-        {{item.value}}
-   </ion-badge>
+    <h1> {{item.sensor_name}} : {{item.value}} </h1>
   </button>
 </ion-list>
-
-
+<ion-note small>
+updated on {{this.dataTimestamp}}
+</ion-note>
 
   <h3>Relay list</h3>
     <ion-list>

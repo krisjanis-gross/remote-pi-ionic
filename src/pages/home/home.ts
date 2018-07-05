@@ -19,6 +19,8 @@ export class HomePage {
   delta_t: number;
 
   AppConfig: any;
+  targetIsReachable:any = false;
+  refreshInterval: any = 2000;
   dataTimestamp:any;
   SensorList: Array<{sensorID:string, sensor_name: string, value:string}> = [];
 
@@ -50,6 +52,13 @@ export class HomePage {
            this.navCtrl.push(ListPage);
          }
      });
+
+
+    setInterval(data=>{
+                        this.refreshData()
+                      },this.refreshInterval);
+
+
   }
 
 
@@ -71,10 +80,15 @@ connectToDevice() {
 checkDeviceVersion() {
    this.backendData.checkDeviceVersion().then(data => {
                                                         this.status_message = JSON.stringify(data);
+                                                        if (  data.response_code == "OK")
+                                                           this.targetIsReachable = true;
+                                                        else
+                                                           this.targetIsReachable = false;
                                                       },
                                               err => {
                                                         console.log(err);
                                                         this.status_message = JSON.stringify(err);
+                                                        this.targetIsReachable = false;
                                                     },
                                             );
 
@@ -101,6 +115,11 @@ openSensorData (event, item)  {
           selectedSensor: item
         });
 
+}
+
+refreshData () {
+ if ( this.targetIsReachable == true)
+      this.getRealtimeData ();
 }
 
 
