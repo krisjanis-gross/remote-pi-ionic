@@ -23,7 +23,7 @@ export class HomePage {
   refreshInterval: any = 2000;
   dataTimestamp:any;
   SensorList: Array<{sensorID:string, sensor_name: string, value:string}> = [];
-
+  RelayList: Array<{relayID:string, relayState: string, relayIsLocked: string, relayDescription:string}> = [];
   constructor(public navCtrl: NavController, private backendData: BackendData,public dataService: Data, public navParams: NavParams) {
   //console.log ('navparams : ' + JSON.stringify(this.navParams) );
 
@@ -97,7 +97,7 @@ checkDeviceVersion() {
 getRealtimeData (){
   this.backendData.getRealtimeData().then(data => {
                                                        this.status_message = JSON.stringify(data.response_code);
-                                                       console.log(JSON.stringify(data.response_data.data));
+                                                      // console.log(JSON.stringify(data.response_data.data));
                                                        this.SensorList = data.response_data.data
                                                        this.dataTimestamp = data.response_data.timestamp;
 
@@ -110,6 +110,22 @@ getRealtimeData (){
 
 }
 
+getRelayData (){
+  this.backendData.getTriggerData().then(data => {
+                                                       this.status_message = JSON.stringify(data.response_code);
+                                                    //   console.log(JSON.stringify(data.response_data.data));
+                                                       this.RelayList = data.response_data.data
+                                                     },
+                                             err => {
+                                                       console.log(err);
+                                                       this.status_message = JSON.stringify(err);
+                                                   },
+                                           );
+
+}
+
+
+
 openSensorData (event, item)  {
       this.navCtrl.push(SensorDataPage, {
           selectedSensor: item
@@ -120,6 +136,7 @@ openSensorData (event, item)  {
 refreshData () {
  if ( this.targetIsReachable == true)
       this.getRealtimeData ();
+      this.getRelayData ();
 }
 
 

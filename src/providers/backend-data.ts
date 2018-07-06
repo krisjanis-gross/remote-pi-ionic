@@ -50,12 +50,38 @@ checkDeviceVersion() {
       request_data: ""
     };
 
-    console.log ('trying to call get_realtime_data from ' + this.ServerURL);
+  //  console.log ('trying to call get_realtime_data from ' + this.ServerURL);
 
     //return   this.http.post(this.ServerURL + '/print_app_API.php', JSON.stringify(post_parameters), headers)
     return   this.http.post(this.ServerURL + '/v2/json_API_v2.php', JSON.stringify(post_parameters))
                           .map(data => data.json())
                           .toPromise();
 }
+
+
+getTriggerData() {
+  let post_parameters = {
+    request_action: "get_GPIO_list",
+    request_data: ""
+  };
+
+//  console.log ('trying to call get_GPIO_list from ' + this.ServerURL);
+
+  //return   this.http.post(this.ServerURL + '/print_app_API.php', JSON.stringify(post_parameters), headers)
+  return   this.http.post(this.ServerURL + '/v2/json_API_v2.php', JSON.stringify(post_parameters))
+                        .map(data => data.json())
+                        .toPromise();
+}
+
+
+
+
+
+
+
+
+
+
+
 
 }

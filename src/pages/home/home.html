@@ -22,20 +22,16 @@
   </button>
 </ion-list>
 <ion-note small>
-updated on {{this.dataTimestamp}}
+ {{this.dataTimestamp}}
 </ion-note>
 
-  <h3>Relay list</h3>
+<h3>Relay list</h3>
     <ion-list>
-      <button ion-item>
-        <ion-label>boiler</ion-label> <ion-toggle  checked="false"></ion-toggle>
-      </button>
-      <button ion-item>
-        <ion-label>ventilation 1 </ion-label><ion-toggle disabled checked="true"></ion-toggle>
-      </button>
-      <button ion-item>
-         <ion-label>ventilation 2</ion-label><ion-toggle  checked="true"></ion-toggle>
-      </button>
+
+    <button ion-item *ngFor="let item of RelayList">
+          <ion-label> {{item.relayDescription}}  / locked = {{item.relayIsLocked}}</ion-label><ion-toggle [disabled]="item.relayIsLocked" [(ngModel)]="item.relayState" ></ion-toggle> 
+    </button>
+
     </ion-list>
 
     <h3>Trigger list</h3>
