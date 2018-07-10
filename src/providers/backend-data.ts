@@ -78,7 +78,22 @@ getTriggerData() {
 
 
 
+setRelayStae(relayID,newState) {
+  let post_parameters = {
+    request_action: "set_GPIO_pin",
+    request_data: {
+      pin_id : relayID,
+      command: newState
+    }
+  };
 
+  console.log ('trying to call set_GPIO_pin from ' + this.ServerURL);
+
+  //return   this.http.post(this.ServerURL + '/print_app_API.php', JSON.stringify(post_parameters), headers)
+  return   this.http.post(this.ServerURL + '/v2/json_API_v2.php', JSON.stringify(post_parameters))
+                        .map(data => data.json())
+                        .toPromise();
+}
 
 
 

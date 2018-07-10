@@ -140,4 +140,30 @@ refreshData () {
 }
 
 
+setRelayValue (event: Event,relayObject) {
+//console.log(JSON.stringify(relayObject));
+  if(relayObject.relayState == true){
+              console.log("toggle set to true" + relayObject.relayID);
+              let newState = 1;
+
+        }
+        else{
+              console.log("toggle set to false" + relayObject.relayID);
+              let newState = 0;
+        }
+
+  this.backendData.setRelayStae(relayObject.relayID, newState).then(data => {
+                                                 this.status_message = JSON.stringify(data.response_code);
+                                                //   console.log(JSON.stringify(data.response_data.data));
+                                                },
+                                        err => {
+                                                 console.log(err);
+                                                 this.status_message = JSON.stringify(err);
+                                                },
+                                        );
+
+
+}
+
+
 }

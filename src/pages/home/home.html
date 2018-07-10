@@ -29,7 +29,7 @@
     <ion-list>
 
     <button ion-item *ngFor="let item of RelayList">
-          <ion-label> {{item.relayDescription}}  / locked = {{item.relayIsLocked}}</ion-label><ion-toggle [disabled]="item.relayIsLocked" [(ngModel)]="item.relayState" ></ion-toggle> 
+          <ion-label>{{item.relayDescription}}</ion-label><ion-toggle [disabled]="item.relayIsLocked" [(ngModel)]="item.relayState" (ionChange)="setRelayValue($evet,item)" ></ion-toggle> 
     </button>
 
     </ion-list>
