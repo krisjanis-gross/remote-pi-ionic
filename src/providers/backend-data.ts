@@ -36,7 +36,7 @@ checkDeviceVersion() {
     request_data: ""
   };
 
-  console.log ('trying to call version_check from ' + this.ServerURL);
+//  console.log ('trying to call version_check from ' + this.ServerURL);
 
   //return   this.http.post(this.ServerURL + '/print_app_API.php', JSON.stringify(post_parameters), headers)
   return   this.http.post(this.ServerURL + '/v2/json_API_v2.php', JSON.stringify(post_parameters))
@@ -59,7 +59,7 @@ checkDeviceVersion() {
 }
 
 
-getTriggerData() {
+getRelayData() {
   let post_parameters = {
     request_action: "get_GPIO_list",
     request_data: ""
@@ -78,7 +78,7 @@ getTriggerData() {
 
 
 
-setRelayStae(relayID,newState) {
+setRelayState (relayID,newState) {
   let post_parameters = {
     request_action: "set_GPIO_pin",
     request_data: {
@@ -87,7 +87,7 @@ setRelayStae(relayID,newState) {
     }
   };
 
-  console.log ('trying to call set_GPIO_pin from ' + this.ServerURL);
+//  console.log ('trying to call set_GPIO_pin from ' + this.ServerURL);
 
   //return   this.http.post(this.ServerURL + '/print_app_API.php', JSON.stringify(post_parameters), headers)
   return   this.http.post(this.ServerURL + '/v2/json_API_v2.php', JSON.stringify(post_parameters))
@@ -96,7 +96,19 @@ setRelayStae(relayID,newState) {
 }
 
 
+getTriggerList() {
+  let post_parameters = {
+    request_action: "get_Trigger_list",
+    request_data: ""
+  };
 
+//  console.log ('trying to call get_GPIO_list from ' + this.ServerURL);
+
+  //return   this.http.post(this.ServerURL + '/print_app_API.php', JSON.stringify(post_parameters), headers)
+  return   this.http.post(this.ServerURL + '/v2/json_API_v2.php', JSON.stringify(post_parameters))
+                        .map(data => data.json())
+                        .toPromise();
+}
 
 
 }

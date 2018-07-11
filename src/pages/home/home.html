@@ -15,7 +15,7 @@
     </ion-card-content>
   </ion-card>
 
-<h3>Sensor list</h3>
+<h3>Sensors</h3>
 <ion-list>
   <button ion-item *ngFor="let item of SensorList" (click)="openSensorData($event, item)">
     <h1> {{item.sensor_name}} : {{item.value}} </h1>
@@ -25,16 +25,30 @@
  {{this.dataTimestamp}}
 </ion-note>
 
-<h3>Relay list</h3>
+<h3>Relays (GPIO pins)</h3>
     <ion-list>
 
     <button ion-item *ngFor="let item of RelayList">
-          <ion-label>{{item.relayDescription}}</ion-label><ion-toggle [disabled]="item.relayIsLocked" [(ngModel)]="item.relayState" (ionChange)="setRelayValue($evet,item)" ></ion-toggle> 
+          <ion-label>{{item.relayDescription}}</ion-label><ion-toggle [disabled]="item.relayIsLocked" [(ngModel)]="item.relayState" (ionChange)="setRelayValue($evet,item)" ></ion-toggle>
     </button>
 
     </ion-list>
 
-    <h3>Trigger list</h3>
+    <h3>Triggers (automatic functions)</h3>
+
+    <ion-list *ngFor="let item of TriggerList">
+        <ion-card ion-item>
+          <ion-card-header>
+              {{item.triggerDescription}}
+          </ion-card-header>
+          <ion-card-content>
+            triggerID = {{item.triggerID}}
+            Enabled:{{item.triggerState}}
+            Parameters = {{item.triggerParameters}}
+          </ion-card-content>
+       </ion-card>
+    </ion-list>
+
     <ion-card>
       <ion-card-header>
     Automated heating
@@ -59,5 +73,9 @@
 
       </ion-card-content>
     </ion-card>
+
+
+
+
 
 </ion-content>

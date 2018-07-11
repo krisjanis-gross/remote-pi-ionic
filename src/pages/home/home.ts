@@ -24,6 +24,8 @@ export class HomePage {
   dataTimestamp:any;
   SensorList: Array<{sensorID:string, sensor_name: string, value:string}> = [];
   RelayList: Array<{relayID:string, relayState: string, relayIsLocked: string, relayDescription:string}> = [];
+  TriggerList: Array<{triggerID:any, triggerState:any, triggerDescription:string,triggerParameters:any}> =[];
+
   constructor(public navCtrl: NavController, private backendData: BackendData,public dataService: Data, public navParams: NavParams) {
   //console.log ('navparams : ' + JSON.stringify(this.navParams) );
 
@@ -68,7 +70,7 @@ export class HomePage {
  }
 
 connectToDevice() {
- console.log ('connecting to device. config : ' + JSON.stringify(this.AppConfig) );
+ //console.log ('connecting to device. config : ' + JSON.stringify(this.AppConfig) );
  this.targetDeviceName = this.AppConfig.deviceTitle;
  this.backendData.ServerURL = this.AppConfig.deviceURL;
  this.backendData.ServerKEY = this.AppConfig.deviceKEY;
@@ -111,7 +113,7 @@ getRealtimeData (){
 }
 
 getRelayData (){
-  this.backendData.getTriggerData().then(data => {
+  this.backendData.getRelayData().then(data => {
                                                        this.status_message = JSON.stringify(data.response_code);
                                                     //   console.log(JSON.stringify(data.response_data.data));
                                                        this.RelayList = data.response_data.data
@@ -137,22 +139,23 @@ refreshData () {
  if ( this.targetIsReachable == true)
       this.getRealtimeData ();
       this.getRelayData ();
+      this.getTriggerData ();
 }
 
 
 setRelayValue (event: Event,relayObject) {
 //console.log(JSON.stringify(relayObject));
   if(relayObject.relayState == true){
-              console.log("toggle set to true" + relayObject.relayID);
+      //        console.log("toggle set to true" + relayObject.relayID);
               let newState = 1;
 
         }
         else{
-              console.log("toggle set to false" + relayObject.relayID);
+      //        console.log("toggle set to false" + relayObject.relayID);
               let newState = 0;
         }
 
-  this.backendData.setRelayStae(relayObject.relayID, newState).then(data => {
+  this.backendData.setRelayState(relayObject.relayID, newState).then(data => {
                                                  this.status_message = JSON.stringify(data.response_code);
                                                 //   console.log(JSON.stringify(data.response_data.data));
                                                 },
@@ -165,5 +168,21 @@ setRelayValue (event: Event,relayObject) {
 
 }
 
+
+getTriggerData () {
+  this.backendData.getTriggerList().then(data => {
+                                                       this.status_message = JSON.stringify(data.response_code);
+                                                    //   console.log(JSON.stringify(data.response_data.data));
+                                                       this.TriggerList = data.response_data.data
+                                                     },
+                                             err => {
+                                                       console.log(err);
+                                                       this.status_message = JSON.stringify(err);
+                                                   },
+                                           );
+
+
+
+}
 
 }
