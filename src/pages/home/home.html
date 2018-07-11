@@ -28,9 +28,9 @@
 <h3>Relays (GPIO pins)</h3>
     <ion-list>
 
-    <button ion-item *ngFor="let item of RelayList">
+    <ion-item *ngFor="let item of RelayList">
           <ion-label>{{item.relayDescription}}</ion-label><ion-toggle [disabled]="item.relayIsLocked" [(ngModel)]="item.relayState" (ionChange)="setRelayValue($evet,item)" ></ion-toggle>
-    </button>
+    </ion-item>
 
     </ion-list>
 

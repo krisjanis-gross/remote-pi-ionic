@@ -145,14 +145,15 @@ refreshData () {
 
 setRelayValue (event: Event,relayObject) {
 //console.log(JSON.stringify(relayObject));
+let newState = 0;
   if(relayObject.relayState == true){
       //        console.log("toggle set to true" + relayObject.relayID);
-              let newState = 1;
+              newState = 1;
 
         }
         else{
       //        console.log("toggle set to false" + relayObject.relayID);
-              let newState = 0;
+              newState = 0;
         }
 
   this.backendData.setRelayState(relayObject.relayID, newState).then(data => {
