@@ -36,7 +36,7 @@ export class HomePage {
           this.dataService.saveLocalAppconfig(this.AppConfig);
           this.connectToDevice ();
     }
-
+  
 
     this.status_message = "Connected OK/Connecting/Can not reach/";
     this.warmth = 24;
@@ -145,7 +145,8 @@ refreshData () {
 
 setRelayValue (event: Event,relayObject) {
 //console.log(JSON.stringify(relayObject));
-let newState = 0;
+  let newState = 0;
+
   if(relayObject.relayState == true){
       //        console.log("toggle set to true" + relayObject.relayID);
               newState = 1;

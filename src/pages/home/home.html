@@ -36,22 +36,39 @@
 
     <h3>Triggers (automatic functions)</h3>
 
-    <ion-list *ngFor="let item of TriggerList">
-        <ion-card ion-item>
-          <ion-card-header>
-              {{item.triggerDescription}}
-          </ion-card-header>
-          <ion-card-content>
-            triggerID = {{item.triggerID}}
-            Enabled:{{item.triggerState}}
-            Parameters = {{item.triggerParameters}}
-          </ion-card-content>
-       </ion-card>
-    </ion-list>
+
+
+    <ion-item-group *ngFor="let triggerItem of TriggerList">
+        <ion-card>
+        <ion-card-header>
+        {{ triggerItem.triggerDescription }}
+        </ion-card-header>
+        <ion-card-content>
+
+          <ion-list>
+            <ion-item>
+                 <ion-label>Enabled</ion-label><ion-toggle  [(ngModel)]="triggerItem.triggerState"></ion-toggle>
+            </ion-item>
+            <ion-list-header>
+                Paramaters:
+            </ion-list-header>
+
+            <button ion-item *ngFor="let parameter of triggerItem.triggerParameters" >
+               ({{parameter.ParameterID}})  {{parameter.ParameterName}} = {{parameter.ParameterValue}}
+            </button>
+          </ion-list>
+
+
+
+      </ion-card-content>
+    </ion-card>
+    </ion-item-group>
+
+
 
     <ion-card>
       <ion-card-header>
-    Automated heating
+  (test)  Automated heating
     </ion-card-header>
       <ion-card-content>
       <ion-list>
