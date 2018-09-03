@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Device List</ion-title>
+    <ion-button  slot="end"  (click)="newDevice()" >Add new device</ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+     <ion-item *ngFor="let item of dataService.deviceList" >
+        <ion-label>
+          <h1 (click)="selectDevice($event, item)">{{item.deviceTitle}}</h1>
+          <h2  (click)="selectDevice($event, item)"  class="item-note">
+            {{item.deviceURL}}
+          </h2>
+
+        </ion-label>
+        <ion-button large clear slot="end" (click)="editDevice($event, item)">Edit</ion-button>
+     </ion-item>
+  </ion-list>
+</ion-content>

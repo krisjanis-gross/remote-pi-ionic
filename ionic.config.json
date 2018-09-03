@@ -1,8 +1,7 @@
 {
-  "name": "remote-pi-ionic",
-  "app_id": "",
-  "type": "ionic-angular",
+  "name": "ionic4-routing",
   "integrations": {
     "cordova": {}
-  }
+  },
+  "type": "angular"
 }
