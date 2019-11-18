@@ -6,23 +6,23 @@ import { Storage } from '@ionic/storage';
 })
 
 export class LocalAppDataService {
+
+  // device list page data
   deviceList: Array<{deviceID:number, deviceTitle: string, deviceURL:string, deviceKEY:string}> = [];
   selectedItemforEdit = {deviceID:0, deviceTitle: "new-device", deviceURL: "http://", deviceKEY: "new-key"};
   selectedItemIndex = 0;
+
 
   constructor(public localStorage: Storage)
     {    }
 
   getDeviceList() {
-    // return this.localStorage.get('deviceList');
-
     this.localStorage.get('deviceList').then((local_data) => {
-
-                                                             if(local_data){
-                                                               this.deviceList = local_data;
-                                                             }
-                                                           }
-                                           );
+                if(local_data){
+                      this.deviceList = local_data;
+                   }
+              }
+                                             );
 
    }
 
@@ -31,14 +31,19 @@ export class LocalAppDataService {
    }
 
    saveNewDeviceItem() {
-    //   console.log("saving new device");
-    //   console.log(JSON.stringify(this.selectedItemforEdit));
-
        // find next available device ID
-       let nextDeviceID = Math.max.apply(Math, (this.deviceList.map(q => q.deviceID)));
-    //    console.log("highest ID = " + nextDeviceID);
+       let nextDeviceID = 0;
 
-      this.selectedItemforEdit.deviceID = nextDeviceID + 1 ;
+       if(this.deviceList.length < 1 || this.deviceList == undefined){
+          //empty
+          nextDeviceID = 1;
+          }
+        else {
+          nextDeviceID = Math.max.apply(Math, (this.deviceList.map(q => q.deviceID))) +  1;
+          console.log("highest ID = " + nextDeviceID);
+        }
+
+      this.selectedItemforEdit.deviceID = nextDeviceID ;
       this.deviceList.push(this.selectedItemforEdit);
 
     //   console.log(JSON.stringify( this.deviceList));
@@ -58,5 +63,18 @@ export class LocalAppDataService {
    saveLocalAppconfig(data) {
      this.localStorage.set('LocalAppconfig', data);
    }
+
+
+  getSavedFilterList () {
+      return this.localStorage.get('SavedFilterList')
+
+  }
+
+  saveSavedFilterList(data) {
+    return this.localStorage.set('SavedFilterList', data);
+  }
+
+
+
 
 }

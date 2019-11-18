@@ -1,91 +1,78 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>{{this.AppConfig.deviceTitle}}</ion-title>
-    <ion-button  slot="end"  href="/list" >device list</ion-button>
+    <ion-buttons slot="end">
+       <ion-button   fill="solid"   href="/list" >device list</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-
+<ion-progress-bar></ion-progress-bar>
   <ion-card>
       <ion-card-content>
       Status: {{this.status_message}}
       </ion-card-content>
-    </ion-card>
+  </ion-card>
 
 
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div><h3>Sensors</h3></div>
+      </ion-col>
+      <ion-col>
+          <div><ion-button  href="/historic-data" >Historic data<ion-icon name="analytics"></ion-icon> </ion-button>
+          </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
-
-  <h3>Sensors <ion-button color="primary"  outline (click)="openHistoricData()">Historic data</ion-button></h3>
     <ion-list>
-      <ion-button ion-item *ngFor="let item of SensorList" (click)="openSensorData($event, item)">
-        <h1> {{item.sensor_name}} : {{item.value}} </h1>
-      </ion-button>
+      <ion-item *ngFor="let item of SensorList" (click)="openSensorData($event, item)">
+        {{item.sensor_name}} : {{item.value}}
+      </ion-item>
     </ion-list>
     <ion-note small>
      {{this.dataTimestamp}}
     </ion-note>
 
 
-    <h3>Relays (GPIO pins)</h3>
+    <h3>Relays (IO pins)</h3>
     <ion-list>
-
-    <ion-item *ngFor="let item of RelayList">
-          <ion-label>{{item.relayDescription}}</ion-label><ion-toggle [disabled]="item.relayIsLocked" [(ngModel)]="item.relayState" (ionChange)="setRelayValue($evet,item)" ></ion-toggle>
-    </ion-item>
-
+      <ion-item *ngFor="let item of RelayList" >
+        <ion-label>{{item.description}} </ion-label>
+          <ion-toggle slot="end" [disabled]="item.locked" [(ngModel)]="item.state" (ionChange)="setRelayValue($evet,item)"  ></ion-toggle>
+      </ion-item>
     </ion-list>
 
-    <h3>Triggers (automatic functions)</h3>
-        <ion-item-group *ngFor="let triggerItem of TriggerList">
-            <ion-card>
+
+
+    <h3>Trigger scripts</h3>
+    <ion-item-group *ngFor="let triggerItem of TriggerList">
+        <ion-card>
             <ion-card-header>
-            {{ triggerItem.triggerDescription }}
+        {{ triggerItem.description }}
             </ion-card-header>
             <ion-card-content>
-
               <ion-list>
                 <ion-item>
-                     <ion-label>Enabled</ion-label><ion-toggle  [(ngModel)]="triggerItem.triggerState"></ion-toggle>
+                     <ion-label>Enabled</ion-label><ion-toggle  [(ngModel)]="triggerItem.state" (ionChange)="toggleTriggerState($evet,triggerItem)" ></ion-toggle>
                 </ion-item>
                 <ion-list-header>
-                    Parameters
+                     Paramaters (click to change value)
                 </ion-list-header>
+                <ion-list>
+                    <ion-item *ngFor="let item of triggerItem.parameters" >
+                         <ion-button size="default" fill="outline" (click)="changeParameterAlert(item.id,item.name,item.par_value)" >{{item.name}} = {{item.par_value}}</ion-button>
+                    </ion-item>
+                </ion-list>
 
-                <ion-button ion-item *ngFor="let parameter of triggerItem.triggerParameters" >
-                   ({{parameter.ParameterID}})  {{parameter.ParameterName}} = {{parameter.ParameterValue}}
-                </ion-button>
+
               </ion-list>
-
-
-
-          </ion-card-content>
+            </ion-card-content>
         </ion-card>
-        </ion-item-group>
+    </ion-item-group>
 
-        <ion-card>
-              <ion-card-header>
-          (test)  Automated heating
-            </ion-card-header>
-              <ion-card-content>
-              <ion-list>
-                <ion-item>
-                     <ion-label>Enabled</ion-label><ion-toggle  checked="true"></ion-toggle>
-                </ion-item>
-                <ion-item>
-                  <ion-label floating>delta t</ion-label>
-                  <ion-input type="text" [(ngModel)]="this.delta_t" ></ion-input>
-                </ion-item>
-                <ion-item>
-
-                  <ion-range min="0" max="50" step="1" pin="true" snaps="true" [(ngModel)]="warmth" color="danger">
-                    <ion-icon range-left small color="primary" name="thermometer"></ion-icon>
-                    <ion-icon range-right color="danger" name="thermometer"></ion-icon>
-                  </ion-range>
-                </ion-item>
-                 </ion-list>
-
-              </ion-card-content>
-            </ion-card>
 
 </ion-content>

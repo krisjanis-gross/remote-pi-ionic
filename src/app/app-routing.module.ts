@@ -7,6 +7,8 @@ const routes: Routes = [
   { path: 'list', loadChildren: './list/list.module#ListPageModule' },
   { path: 'sensor-data', loadChildren: './sensor-data/sensor-data.module#SensorDataPageModule' },
   { path: 'device-data', loadChildren: './device-data/device-data.module#DeviceDataPageModule' },
+  { path: 'historic-data', loadChildren: './historic-data/historic-data.module#HistoricDataPageModule' },
+
 ];
 
 @NgModule({
