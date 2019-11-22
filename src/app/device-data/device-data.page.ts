@@ -10,23 +10,28 @@ import { LocalAppDataService } from '../local-app-data.service';
 })
 export class DeviceDataPage implements OnInit {
 
-  constructor(   public navCtrl: NavController,public dataService: LocalAppDataService ) { }
+  constructor(   public navCtrl: NavController,
+                 public dataService: LocalAppDataService )
+            {
+            //  console.log("dataservice:  " + JSON.stringify(this.dataService));
+            }
 
   ngOnInit() {
   }
 
 
   saveDeviceData () {
-    if (this.dataService.selectedItemIndex == 0) {
+  //  console.log("save device data: this.dataService.selectedItemIndex " + this.dataService.selectedItemIndex);
+    if (this.dataService.selectedItemIndex == null) {
         // new device
-      //  console.log("saving new device");
+    //    console.log("saving new device");
         this.dataService.saveNewDeviceItem();
      }
      else {
-      // console.log("saving existing device");
+    //   console.log("saving existing device");
        // save existing device data
        this.dataService.saveExistingDeviceItem();
      }
-     this.navCtrl.goBack('/list');
+     this.navCtrl.back();
   }
 }

@@ -10,7 +10,7 @@ export class LocalAppDataService {
   // device list page data
   deviceList: Array<{deviceID:number, deviceTitle: string, deviceURL:string, deviceKEY:string}> = [];
   selectedItemforEdit = {deviceID:0, deviceTitle: "new-device", deviceURL: "http://", deviceKEY: "new-key"};
-  selectedItemIndex = 0;
+  selectedItemIndex:any;
 
 
   constructor(public localStorage: Storage)
@@ -40,8 +40,9 @@ export class LocalAppDataService {
           }
         else {
           nextDeviceID = Math.max.apply(Math, (this.deviceList.map(q => q.deviceID))) +  1;
-          console.log("highest ID = " + nextDeviceID);
+
         }
+      //console.log("new device ID = " + nextDeviceID);
 
       this.selectedItemforEdit.deviceID = nextDeviceID ;
       this.deviceList.push(this.selectedItemforEdit);
@@ -52,6 +53,8 @@ export class LocalAppDataService {
 
    saveExistingDeviceItem() {
        this.deviceList[this.selectedItemIndex] = this.selectedItemforEdit;
+      // console.log("updating existing device record. deviceid =  " + this.selectedItemforEdit.deviceID);
+  //     console.log("updating existing device record. device index =  " + this.selectedItemIndex);
        this.saveDeviceList(this.deviceList);
    }
 

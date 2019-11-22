@@ -1,18 +1,15 @@
 import { Injectable } from '@angular/core';
 
-import 'rxjs/add/operator/map';
-import 'rxjs/Rx';
+
+//import 'rxjs/add/operator/map';
+//import 'rxjs/Rx';
 
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpRequest } from '@angular/common/http';
 
 
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
-/*
-const httpOptions = {
-  headers: new HttpHeaders({'Content-Type': 'application/json'})
-};
-*/
+
 @Injectable({
   providedIn: 'root'
 })
@@ -99,7 +96,7 @@ getRelayData(): Observable<any> {
   };
 
   let API_CALL_URL  = this.ServerURL + this.ServerPath;
-  console.log(' get_GPIO_list  URL:', API_CALL_URL);
+//  console.log(' get_GPIO_list  URL:', API_CALL_URL);
 
    return this.http.post(API_CALL_URL,  post_parameters , this.httpOptions).pipe(
      map(this.extractData),
@@ -117,7 +114,7 @@ getSensorData(): Observable<any> {
   };
 
   let API_CALL_URL  = this.ServerURL + this.ServerPath;
-  console.log(' getSensorData  URL:', API_CALL_URL);
+//  console.log(' getSensorData  URL:', API_CALL_URL);
 
    return this.http.post(API_CALL_URL,  post_parameters , this.httpOptions).pipe(
      map(this.extractData),
@@ -137,7 +134,7 @@ getChartData(data_period,selected_sensors): Observable<any> {
   };
 
   let API_CALL_URL  = this.ServerURL + this.ServerPath;
-  console.error(' get_historic_data  URL:', API_CALL_URL , post_parameters);
+//  console.error(' get_historic_data  URL:', API_CALL_URL , post_parameters);
 
    return this.http.post(API_CALL_URL,  post_parameters , this.httpOptions).pipe(
      map(this.extractData),
@@ -177,7 +174,7 @@ setRelayState (relayID,newState): Observable<any>  {
   };
 
   let API_CALL_URL  = this.ServerURL + this.ServerPath;
-  console.log(' get_GPIO_list  URL:', API_CALL_URL);
+//  console.log(' get_GPIO_list  URL:', API_CALL_URL);
 
    return this.http.post(API_CALL_URL,  post_parameters , this.httpOptions).pipe(
      map(this.extractData),
@@ -206,7 +203,7 @@ setParameterValue  (parameterID,newValue): Observable<any>  {
   };
 
   let API_CALL_URL  = this.ServerURL + this.ServerPath;
-  console.log(' setParameterValue  URL:', API_CALL_URL);
+  //console.log(' setParameterValue  URL:', API_CALL_URL);
 
    return this.http.post(API_CALL_URL,  post_parameters , this.httpOptions).pipe(
      map(this.extractData),
@@ -229,7 +226,7 @@ toggleTriggerState (triggerID,newState): Observable<any>  {
   };
 
   let API_CALL_URL  = this.ServerURL + this.ServerPath;
-  console.log(' set_trigger_state  URL:', API_CALL_URL);
+  //console.log(' set_trigger_state  URL:', API_CALL_URL);
 
    return this.http.post(API_CALL_URL,  post_parameters , this.httpOptions).pipe(
      map(this.extractData),
@@ -248,7 +245,7 @@ getTriggerData(): Observable<any> {
 
 
   let API_CALL_URL  = this.ServerURL + this.ServerPath;
-  console.log (' get_Trigger_list  URL:', API_CALL_URL , post_parameters);
+//  console.log (' get_Trigger_list  URL:', API_CALL_URL , post_parameters);
 
    return this.http.post(API_CALL_URL,  post_parameters , this.httpOptions).pipe(
      map(this.extractData),

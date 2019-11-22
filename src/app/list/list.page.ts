@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController} from '@ionic/angular';
+import { Router } from '@angular/router';
 import { LocalAppDataService } from '../local-app-data.service';
 
 import { DeviceDataPage } from '../device-data/device-data.page';
@@ -15,7 +15,7 @@ export class ListPage implements OnInit {
   selecteditem: any;
 
 
-  constructor(public navCtrl: NavController,
+  constructor(public router: Router,
               public dataService: LocalAppDataService)
                {
                  this.dataService.getDeviceList();
@@ -26,22 +26,24 @@ export class ListPage implements OnInit {
 
 
   editDevice(event, item) {
+  //  console.log("edit device called: item= " +  JSON.stringify(item));
     this.dataService.selectedItemforEdit = item;
     this.dataService.selectedItemIndex = this.dataService.deviceList.indexOf(item);
-    this.navCtrl.goForward('/device-data');
+  //  console.log("edit device called: ataService.selectedItemIndex " +  this.dataService.selectedItemIndex );
+    this.router.navigate(['/device-data']);
   }
 
 
   newDevice() {
     this.dataService.selectedItemforEdit = {deviceID:0, deviceTitle: "new-device", deviceURL: "http://", deviceKEY: "new-key"};
-    this.dataService.selectedItemIndex = 0;
-    this.navCtrl.goForward('/device-data');
+    this.dataService.selectedItemIndex = null;
+    this.router.navigate(['/device-data']);
   }
 
 
   selectDevice(event, item) {
       this.dataService.saveLocalAppconfig(item);
-      this.navCtrl.goBack('/home');
+      this.router.navigate(['/home']);
       }
 
 }

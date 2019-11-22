@@ -4,6 +4,8 @@
        <ion-button   fill="solid"  href="/" > < Back</ion-button>
     </ion-buttons >
     <ion-title>Historic data</ion-title>
+    <ion-progress-bar [hidden]="!any_LOADING" type="indeterminate"></ion-progress-bar>
+    <ion-progress-bar [hidden]="any_LOADING" ></ion-progress-bar>
   </ion-toolbar>
 </ion-header>
 

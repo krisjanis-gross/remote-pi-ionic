@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController} from '@ionic/angular';
-
-import { LoadingController } from '@ionic/angular';
+//import { NavController} from '@ionic/angular';
+import { Router } from '@angular/router';
 
 import { BackendDataService } from '../backend-data.service';
 import { LocalAppDataService } from '../local-app-data.service';
@@ -24,32 +23,26 @@ export class HomePage {
 
 connectedToDevice = false;
 
+sensors_loading = false;
+relays_loading = false;
+triggers_loading = false;
+other_loading = false;
+any_LOADING  = false;
 
  constructor(
-                 public navCtrl: NavController,
+              //   public navCtrl: NavController,
+                 private router: Router,
                  public localData: LocalAppDataService,
-                 public loadingController: LoadingController,
                  private backendData: BackendDataService,
                  public alertController: AlertController,
             )
             {
               this.status_message = "...";
-
-            // get local AppConfig
-    //         this.getAppConfig ();
-
-
-           // start auto-refresh
-              //setInterval(data=>{
-            //                      this.refreshData()
-            //                    },this.refreshInterval);
-
-
             }
 
 
 async dataRefresh () {
-     console.log ('APP data refresh initiated : ' );
+  //   console.log ('APP data refresh initiated : ' );
      if (this.connectedToDevice) {
        this.getRelayData();
        this.getSensorData () ;
@@ -73,7 +66,7 @@ async dataRefresh () {
     this.localData.getLocalAppconfig().then((val) => {
         if (val != null) {
             this.AppConfig = val;
-            console.log ('app config : ' + JSON.stringify(this.AppConfig) );
+            console.log ('app config : ' + JSON.stringify(this.AppConfig));
             this.backendData.ServerURL = this.AppConfig.deviceURL;
             this.connectToDevice() ;
 
@@ -81,7 +74,7 @@ async dataRefresh () {
                setInterval(function(){ this.dataRefresh();}.bind(this), 5000);
          }
          else {
-           this.navCtrl.goForward('/list');
+           this.router.navigate(['/list']);
          }
      });
 
@@ -94,10 +87,8 @@ async dataRefresh () {
 
 
   async connectToDevice () {
-    const loading = await this.loadingController.create({
-      content: 'Loading...'
-    });
-    await loading.present();
+    this.other_loading = true;
+    this.update_loading ();
     await this.backendData.checkDeviceVersion()
       .subscribe(res => {
       //  console.log(res);
@@ -108,12 +99,13 @@ async dataRefresh () {
         this.getTriggerData ()
         this.connectedToDevice = true;
 
-  //      this.classrooms = res;
-        loading.dismiss();
+        this.other_loading = false;
+        this.update_loading ();
       }, err => {
         console.log(err);
         this.status_message = "connection error";
-        loading.dismiss();
+        this.other_loading = false;
+        this.update_loading ();
       });
 
 
@@ -121,10 +113,8 @@ async dataRefresh () {
 }
 
 async getSensorData () {
-      const loading = await this.loadingController.create({
-        content: 'Loading getSensorData'
-      });
-      await loading.present();
+      this.sensors_loading = true;
+      this.update_loading ();
       await this.backendData.getSensorData()
         .subscribe(res => {
         //  console.log(res);
@@ -132,12 +122,14 @@ async getSensorData () {
           // get trigger data.
           this.SensorList = res.response_data.data;
           this.status_message = res.response_data.timestamp;
-
+          this.sensors_loading = false;
+          this.update_loading ();
     //      this.classrooms = res;
-          loading.dismiss();
+
         }, err => {
           console.log(err);
-          loading.dismiss();
+           this.sensors_loading = false;
+           this.update_loading ();
         });
 
 
@@ -145,110 +137,77 @@ async getSensorData () {
 
 
 async getRelayData () {
-      const loading = await this.loadingController.create({
-        content: 'Loading'
-      });
-      await loading.present();
+      this.relays_loading = true;
+      this.update_loading ();
       await this.backendData.getRelayData()
         .subscribe(res => {
-        //  console.log(res);
-        //  console.log(res.response_data);
-          // get trigger data.
           this.RelayList = res.response_data;
-
-    //      this.classrooms = res;
-          loading.dismiss();
+          this.relays_loading = false;
+          this.update_loading ();
         }, err => {
           console.log(err);
-          loading.dismiss();
+          this.relays_loading = false;
+          this.update_loading ();
         });
-
-
       }
 
 
+async setRelayValue ( item) {
+  //  console.log("000000000000000000000000000 setRelayValue started" );
+    let new_state = 0;
 
+    if (item.state)
+       { new_state = 1;}
 
-async setRelayValue (event, item) {
-//console.log(item);
-let new_state = 0;
+       this.other_loading = true;
+       this.update_loading ();
 
-if (item.state)
-   { new_state = 1;}
-
-
-const loading = await this.loadingController.create({
-  content: 'Loading'
-});
-await loading.present();
-await this.backendData.setRelayState(item.id,new_state)
-  .subscribe(res => {
-    console.log(res);
-  //  console.log(res.response_data);
-    // get trigger data.
-
-
-//      this.classrooms = res;
-    loading.dismiss();
-  }, err => {
-    console.log(err);
-    loading.dismiss();
-  });
-
+    await this.backendData.setRelayState(item.id,new_state)
+      .subscribe(res => {
+        console.log(res);
+        this.other_loading = false;
+        this.update_loading ();
+      }, err => {
+        console.log(err);
+        this.other_loading = false;
+        this.update_loading ();
+      });
 
 }
 
 async toggleTriggerState (event, item) {
-//console.log(item);
+//console.log("/////////////////toggleTriggerState");
 let new_state = 0;
+if (item.state)   { new_state = 1;}
 
-if (item.state)
-   { new_state = 1;}
+this.other_loading = true;
+this.update_loading ();
 
-
-const loading = await this.loadingController.create({
-  content: 'Loading'
-});
-await loading.present();
 await this.backendData.toggleTriggerState(item.triggerID,new_state)
   .subscribe(res => {
     console.log(res);
-  //  console.log(res.response_data);
-    // get trigger data.
-
-
-//      this.classrooms = res;
-    loading.dismiss();
+    this.other_loading = false;
+    this.update_loading ();
   }, err => {
     console.log(err);
-    loading.dismiss();
+    this.other_loading = false;
+    this.update_loading ();
   });
-
-
 }
 
 
-
 async getTriggerData () {
-      const loading = await this.loadingController.create({
-        content: 'Loading'
-      });
-      await loading.present();
+      this.triggers_loading = true;
       await this.backendData.getTriggerData()
         .subscribe(res => {
-        //  console.log(res);
-//          console.log(res.response_data);
-          // get trigger data.
           this.TriggerList = res.response_data;
-//          console.log(this.TriggerList);
-    //      this.classrooms = res;
-          loading.dismiss();
+          this.triggers_loading = false;
+          this.update_loading ();
         }, err => {
           console.log(err);
-          loading.dismiss();
+          this.triggers_loading = false;
+          this.update_loading ();
         });
-
-
       }
 
 
@@ -283,13 +242,6 @@ async getTriggerData () {
                          .subscribe(res => {
                             this.getTriggerData ();
                          });
-
-
-
-
-
-                 // call backend to change the value!
-
                }
              }
            ]
@@ -298,7 +250,17 @@ async getTriggerData () {
          await alert.present();
         }
 
+  update_loading () {
+    if ( this.sensors_loading ||
+         this.relays_loading ||
+         this.triggers_loading ||
+         this.other_loading  )
+         {
+           this.any_LOADING = true;
+         }
+    else {this.any_LOADING = false; }
+    //console.log('------------------- LOADING  :' + this.any_LOADING);
 
-
+  }
 
   }

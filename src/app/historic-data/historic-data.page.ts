@@ -31,7 +31,7 @@ export class HistoricDataPage implements OnInit {
  blankFilterList:{};
  loadFilterSelectedID:any;
 
-
+any_LOADING = false;
 
 
   constructor(
@@ -44,13 +44,15 @@ export class HistoricDataPage implements OnInit {
   ionViewWillEnter(){
       //  console.log ('entered home view ' );
 
-        this.getChartData () ;
+
 
         this.localData.getLocalAppconfig().then((val) =>
               {
                 if (val != null) {
                     this.AppConfig = val;
-                    //console.log ('app config : ' + JSON.stringify(this.AppConfig) );
+                    console.log ('app config : ' + JSON.stringify(this.AppConfig) );
+                    this.backendData.ServerURL = this.AppConfig.deviceURL;
+                    this.getChartData () ;
                     this.loadSavedFilters();
                  }
                });
@@ -61,35 +63,30 @@ export class HistoricDataPage implements OnInit {
 
 
   async getChartData () {
-        const loading = await this.loadingController.create({
-          content: 'Loading chartData'
-        });
-        await loading.present();
+        this.any_LOADING = true;
+
         await this.backendData.getChartData(this.chart_time_interval, this.selected_sensors)
           .subscribe(res => {
             console.log(res);
-          //  console.log(res.response_data);
-            // get trigger data.
-//            this.SensorList = res.response_data.data;
+              // console.log(res.response_data);
+              // get trigger data.
+              // this.SensorList = res.response_data.data;
         this.chart_data = res.response_data;
         this.show_chart ();
         this.getSensorList () ;
 
+        this.any_LOADING = false;
 
-      //      this.classrooms = res;
-            loading.dismiss();
           }, err => {
             console.log(err);
-            loading.dismiss();
+
+            this.any_LOADING = false;
+
           });
-
-
         }
 
 
     show_chart() {
-
-
       var myChart = HighCharts.chart('container', {
     chart: {
       type: 'spline'
@@ -114,36 +111,19 @@ export class HistoricDataPage implements OnInit {
 
 
 change_period () {
-
-//this.chart_time_interval = "1hr";
-//  alert(" change period! " + this.chart_time_interval);
-this.getChartData () ;
+    this.getChartData () ;
 }
 
 
 
 
 async getSensorList () {
-      const loading = await this.loadingController.create({
-        content: 'Loading SensorList'
-      });
-      await loading.present();
       await this.backendData.getSensorList(this.chart_time_interval)
         .subscribe(res => {
           console.log(res);
-        //  console.log(res.response_data);
-          // get trigger data.
-//            this.SensorList = res.response_data.data;
-      this.SensorList = res.response_data;
-  //    this.show_chart ();
-
-
-
-    //      this.classrooms = res;
-          loading.dismiss();
+          this.SensorList = res.response_data;
         }, err => {
           console.log(err);
-          loading.dismiss();
         });
 
 
@@ -153,9 +133,13 @@ async getSensorList () {
 async select_sensors (event) {
   //  console.log(this.selected_sensors);
     this.getChartData () ;
-
-
 }
+
+
+
+
+
+
 
  saveFilterSelection () {
   // get selected filter values and save

@@ -1,21 +1,20 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{this.AppConfig.deviceTitle}}</ion-title>
+    <ion-title>{{this.AppConfig.deviceTitle}} </ion-title>
     <ion-buttons slot="end">
        <ion-button   fill="solid"   href="/list" >device list</ion-button>
     </ion-buttons>
+    <ion-progress-bar [hidden]="!any_LOADING" type="indeterminate"></ion-progress-bar>
+    <ion-progress-bar [hidden]="any_LOADING" ></ion-progress-bar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-<ion-progress-bar></ion-progress-bar>
   <ion-card>
       <ion-card-content>
       Status: {{this.status_message}}
       </ion-card-content>
   </ion-card>
-
-
   <ion-grid>
     <ion-row>
       <ion-col>
@@ -28,21 +27,20 @@
     </ion-row>
   </ion-grid>
 
+
     <ion-list>
       <ion-item *ngFor="let item of SensorList" (click)="openSensorData($event, item)">
         {{item.sensor_name}} : {{item.value}}
       </ion-item>
     </ion-list>
-    <ion-note small>
-     {{this.dataTimestamp}}
-    </ion-note>
+
 
 
     <h3>Relays (IO pins)</h3>
     <ion-list>
       <ion-item *ngFor="let item of RelayList" >
         <ion-label>{{item.description}} </ion-label>
-          <ion-toggle slot="end" [disabled]="item.locked" [(ngModel)]="item.state" (ionChange)="setRelayValue($evet,item)"  ></ion-toggle>
+          <ion-toggle slot="end" [disabled]="item.locked" [(ngModel)]="item.state"  [checked]="item.state" (ionChange)="setRelayValue(item)"  ></ion-toggle>
       </ion-item>
     </ion-list>
 
@@ -57,7 +55,7 @@
             <ion-card-content>
               <ion-list>
                 <ion-item>
-                     <ion-label>Enabled</ion-label><ion-toggle  [(ngModel)]="triggerItem.state" (ionChange)="toggleTriggerState($evet,triggerItem)" ></ion-toggle>
+                     <ion-label>Enabled</ion-label><ion-toggle  [(ngModel)]="triggerItem.state" [checked]="triggerItem.state"  (ionChange)="toggleTriggerState($event,triggerItem)" ></ion-toggle>
                 </ion-item>
                 <ion-list-header>
                      Paramaters (click to change value)
