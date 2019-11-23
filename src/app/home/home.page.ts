@@ -29,6 +29,8 @@ triggers_loading = false;
 other_loading = false;
 any_LOADING  = false;
 
+status_log_stack = [];
+
  constructor(
               //   public navCtrl: NavController,
                  private router: Router,
@@ -55,7 +57,6 @@ async dataRefresh () {
 
 
   ionViewWillEnter(){
-      //  console.log ('entered home view ' );
         this.getAppConfig ();
   }
 
@@ -66,6 +67,7 @@ async dataRefresh () {
     this.localData.getLocalAppconfig().then((val) => {
         if (val != null) {
             this.AppConfig = val;
+            this.status_log_stack.push('app config=' + JSON.stringify(this.AppConfig));
             console.log ('app config : ' + JSON.stringify(this.AppConfig));
             this.backendData.ServerURL = this.AppConfig.deviceURL;
             this.connectToDevice() ;
@@ -81,14 +83,10 @@ async dataRefresh () {
 
   }
 
-
-
-
-
-
   async connectToDevice () {
     this.other_loading = true;
     this.update_loading ();
+    this.status_log_stack.push('connectToDevice. URL=' + this.backendData.ServerURL);
     await this.backendData.checkDeviceVersion()
       .subscribe(res => {
       //  console.log(res);
@@ -103,6 +101,7 @@ async dataRefresh () {
         this.update_loading ();
       }, err => {
         console.log(err);
+        this.status_log_stack.push('****connection error :' + err);
         this.status_message = "connection error";
         this.other_loading = false;
         this.update_loading ();
@@ -250,6 +249,32 @@ async getTriggerData () {
          await alert.present();
         }
 
+
+        async status_log_alert() {
+          let log_message =  this.status_log_stack.join("*********"); 
+          console.log("log_message = " + log_message);
+          const status_alert = await this.alertController.create({
+             header:  "Status LOG",
+             message:  log_message,
+             buttons: [
+               {
+                 text: 'OK',
+                 role: 'cancel',
+                 cssClass: 'secondary',
+                 handler: (blah) => {
+                  // console.log('Confirm Cancel: blah');
+                 }
+               },
+             ]
+           });
+
+           await status_alert.present();
+
+
+
+
+
+        }
   update_loading () {
     if ( this.sensors_loading ||
          this.relays_loading ||

@@ -10,7 +10,7 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-card>
+  <ion-card (click)="status_log_alert()" >
       <ion-card-content>
       Status: {{this.status_message}}
       </ion-card-content>
