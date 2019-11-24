@@ -8,7 +8,7 @@ import { LocalAppDataService } from '../local-app-data.service';
 import { AlertController } from '@ionic/angular';
 
 
-@Component({
+@Component({  
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
@@ -251,7 +251,7 @@ async getTriggerData () {
 
 
         async status_log_alert() {
-          let log_message =  this.status_log_stack.join("*********"); 
+          let log_message =  this.status_log_stack.join("*********");
           console.log("log_message = " + log_message);
           const status_alert = await this.alertController.create({
              header:  "Status LOG",
