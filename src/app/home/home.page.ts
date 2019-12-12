@@ -6,9 +6,9 @@ import { BackendDataService } from '../backend-data.service';
 import { LocalAppDataService } from '../local-app-data.service';
 
 import { AlertController } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 
-
-@Component({  
+@Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
@@ -31,12 +31,15 @@ any_LOADING  = false;
 
 status_log_stack = [];
 
+subscription:any;
+
  constructor(
               //   public navCtrl: NavController,
                  private router: Router,
                  public localData: LocalAppDataService,
                  private backendData: BackendDataService,
                  public alertController: AlertController,
+                 public platform: Platform,
             )
             {
               this.status_message = "...";
@@ -61,6 +64,11 @@ async dataRefresh () {
   }
 
 
+ ionViewDidEnter(){ this.subscription = this.platform.backButton.subscribe(()=>{ navigator['app'].exitApp(); }); }
+ ionViewWillLeave(){ this.subscription.unsubscribe(); }
+
+
+
 
 
   getAppConfig () {
@@ -70,6 +78,7 @@ async dataRefresh () {
             this.status_log_stack.push('app config=' + JSON.stringify(this.AppConfig));
             console.log ('app config : ' + JSON.stringify(this.AppConfig));
             this.backendData.ServerURL = this.AppConfig.deviceURL;
+            this.backendData.ServerKEY = this.AppConfig.deviceKEY;
             this.connectToDevice() ;
 
             // enable automatic reload

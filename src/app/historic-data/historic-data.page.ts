@@ -3,8 +3,8 @@ import { LoadingController } from '@ionic/angular';
 import { BackendDataService } from '../backend-data.service';
 
 import { LocalAppDataService } from '../local-app-data.service';
-
-
+import { Platform } from '@ionic/angular';
+import { Router } from '@angular/router';
 import * as HighCharts from 'highcharts';
 
 @Component({
@@ -33,16 +33,25 @@ export class HistoricDataPage implements OnInit {
 
 any_LOADING = false;
 
+HistoricDataChart:any;
+ChartIsLoaded = false;
+DataUpdateEnabled = true;
+
+last_timestamp = "";
+subscription:any;
 
   constructor(
     public loadingController: LoadingController,
     private backendData: BackendDataService,
     public localData: LocalAppDataService,
+    public platform: Platform,
+    private router: Router,
 
   ) {    }
 
   ionViewWillEnter(){
       //  console.log ('entered home view ' );
+
 
 
 
@@ -52,14 +61,20 @@ any_LOADING = false;
                     this.AppConfig = val;
                     console.log ('app config : ' + JSON.stringify(this.AppConfig) );
                     this.backendData.ServerURL = this.AppConfig.deviceURL;
+                    this.backendData.ServerKEY = this.AppConfig.deviceKEY;
                     this.getChartData () ;
                     this.loadSavedFilters();
+                    setInterval(function()
+                                          { this.getChartIncrementalData();
+                                          }.bind(this),
+                                 1000);
                  }
                });
   }
 
 
-
+  ionViewDidEnter(){ this.subscription = this.platform.backButton.subscribe(()=>{  this.router.navigate(['/']) /*navigator['app'].exitApp();*/     }); }
+  ionViewWillLeave(){ this.subscription.unsubscribe(); }
 
 
   async getChartData () {
@@ -87,9 +102,14 @@ any_LOADING = false;
 
 
     show_chart() {
-      var myChart = HighCharts.chart('container', {
+    this.HistoricDataChart = HighCharts.chart('container', {
     chart: {
-      type: 'spline'
+      type: 'spline',
+      events: {
+            load: function () {  //set up the updating of the chart each second
+                                  this.ChartIsLoaded = true;
+                                }.bind(this),
+       }
     },
     title: {
       text: 'Historic Data'
@@ -109,6 +129,61 @@ any_LOADING = false;
   });
   }
 
+
+  async getChartIncrementalData () {
+  if (this.ChartIsLoaded && this.DataUpdateEnabled)  {
+          // check for update on backend.
+
+      //    var x = (new Date()).getTime(), // current time
+      //    y = Math.random() * 100;
+      //    console.log("adding point to chart " + x + y  );
+/*
+          var series = this.HistoricDataChart.get("rnd_data");
+          if (series) {
+                    series.addPoint([x, y], true, false);
+                    }
+*/
+
+          await this.backendData.getSensorData()
+              .subscribe(res => {
+                                    //console.log(JSON.stringify(res))
+                                    // check if this is new relays_loading
+                                  //  console.log("timestamp =  " + res.response_data.timestamp)
+                                    if (this.last_timestamp != res.response_data.timestamp)
+                                        { // new sensor data
+                                        //  console.log("new sensor data =  " +  JSON.stringify(res.response_data.data));
+                                          this.last_timestamp = res.response_data.timestamp
+
+
+                                          Object.keys(res.response_data.data).forEach(function(key,index) {
+                                                            // key: the name of the object key
+                                                            // index: the ordinal position of the key within the object
+                                                            //console.log("key " +  key);
+                                                            //console.log("index " +  index);
+                                                            let sensorID = res.response_data.data[index].id;
+                                                            let sensorValue = res.response_data.data[index].value;
+
+                                                            let readingTimestamp = Date.parse(res.response_data.timestamp + ' UTC');
+                                                            console.log("res.response_data.timestamp  " +  res.response_data.timestamp);
+                                                            console.log("readingTimestamp " +  readingTimestamp);
+                                                            //console.log("sensorID " +  sensorID);
+                                                            //console.log("sensorValue " +  sensorValue);
+                                                            var series = this.HistoricDataChart.get(sensorID);
+                                                            var value = parseFloat(sensorValue);
+                                                            if (series) {
+                                                                      series.addPoint([readingTimestamp, value], true, false);
+                                                                      }
+
+
+                                                        }.bind(this));
+                                        }
+
+                                }, err => {
+                                          console.log(err);
+                                          });
+
+                            }
+}
 
 change_period () {
     this.getChartData () ;

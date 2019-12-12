@@ -64,6 +64,7 @@ export class BackendDataService {
   checkDeviceVersion(): Observable<any> {
 
   let post_parameters = {
+    API_key : this.ServerKEY,
     request_action: "version_check",
     request_data: ""
   };
@@ -82,6 +83,7 @@ export class BackendDataService {
 
   getRealtimeData() {
     let post_parameters = {
+      API_key : this.ServerKEY,
       request_action: "get_realtime_data",
       request_data: ""
     };
@@ -91,6 +93,7 @@ export class BackendDataService {
 
 getRelayData(): Observable<any> {
   let post_parameters = {
+    API_key : this.ServerKEY,
     request_action: "get_GPIO_list",
     request_data: ""
   };
@@ -109,6 +112,7 @@ getRelayData(): Observable<any> {
 
 getSensorData(): Observable<any> {
   let post_parameters = {
+    API_key : this.ServerKEY,
     request_action: "get_sensor_data",
     request_data: ""
   };
@@ -126,6 +130,7 @@ getSensorData(): Observable<any> {
 
 getChartData(data_period,selected_sensors): Observable<any> {
   let post_parameters = {
+    API_key : this.ServerKEY,
     request_action: "get_historic_data",
     request_data: {
         period: data_period,
@@ -149,6 +154,7 @@ getSensorList(data_period): Observable<any> {
       period: data_period
     }
   let post_parameters = {
+    API_key : this.ServerKEY,
     request_action: "get_sensor_list",
     request_data: period
   };
@@ -166,6 +172,7 @@ getSensorList(data_period): Observable<any> {
 setRelayState (relayID,newState): Observable<any>  {
 
   let post_parameters = {
+    API_key : this.ServerKEY,
     request_action: "set_GPIO_pin",
     request_data: {
       pin_id : relayID,
@@ -195,10 +202,11 @@ setRelayState (relayID,newState): Observable<any>  {
 setParameterValue  (parameterID,newValue): Observable<any>  {
 
   let post_parameters = {
-      request_action: "setParameterValue",
+    API_key : this.ServerKEY,
+    request_action: "setParameterValue",
     request_data: {
-      parameterID : parameterID,
-      newValue: newValue
+    parameterID : parameterID,
+    newValue: newValue
     }
   };
 
@@ -218,10 +226,11 @@ toggleTriggerState (triggerID,newState): Observable<any>  {
 
 
   let post_parameters = {
-      request_action: "set_trigger_state",
+    API_key : this.ServerKEY,
+    request_action: "set_trigger_state",
     request_data: {
-      triggerID : triggerID,
-      command: newState
+    triggerID : triggerID,
+    command: newState
     }
   };
 
@@ -239,6 +248,7 @@ toggleTriggerState (triggerID,newState): Observable<any>  {
 
 getTriggerData(): Observable<any> {
   let post_parameters = {
+    API_key : this.ServerKEY,
     request_action: "get_Trigger_list",
     request_data: ""
   };

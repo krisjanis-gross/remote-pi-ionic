@@ -4,6 +4,10 @@ import { LocalAppDataService } from '../local-app-data.service';
 
 import { DeviceDataPage } from '../device-data/device-data.page';
 
+import { Platform } from '@ionic/angular';
+
+
+
 @Component({
   selector: 'app-list',
   templateUrl: './list.page.html',
@@ -13,16 +17,23 @@ export class ListPage implements OnInit {
 
 
   selecteditem: any;
-
+  subscription:any;
 
   constructor(public router: Router,
-              public dataService: LocalAppDataService)
+              public dataService: LocalAppDataService,
+                public platform: Platform,
+              )
                {
                  this.dataService.getDeviceList();
                 }
 
   ngOnInit() {
   }
+
+
+  ionViewDidEnter(){ this.subscription = this.platform.backButton.subscribe(()=>{  this.router.navigate(['/']) /*navigator['app'].exitApp();*/     }); }
+  ionViewWillLeave(){ this.subscription.unsubscribe(); }
+
 
 
   editDevice(event, item) {

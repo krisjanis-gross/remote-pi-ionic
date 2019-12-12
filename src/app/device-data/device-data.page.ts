@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NavController} from '@ionic/angular';
 
 import { LocalAppDataService } from '../local-app-data.service';
+import { Platform } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-device-data',
@@ -9,15 +11,23 @@ import { LocalAppDataService } from '../local-app-data.service';
   styleUrls: ['./device-data.page.scss'],
 })
 export class DeviceDataPage implements OnInit {
-
+  subscription:any;
   constructor(   public navCtrl: NavController,
-                 public dataService: LocalAppDataService )
+                 public dataService: LocalAppDataService,
+                 public platform: Platform,
+                 public router: Router,
+              )
             {
             //  console.log("dataservice:  " + JSON.stringify(this.dataService));
             }
 
   ngOnInit() {
   }
+
+
+  ionViewDidEnter(){ this.subscription = this.platform.backButton.subscribe(()=>{  this.router.navigate(['/list']) /*navigator['app'].exitApp();*/     }); }
+  ionViewWillLeave(){ this.subscription.unsubscribe(); }
+
 
 
   saveDeviceData () {

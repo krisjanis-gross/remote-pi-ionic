@@ -43,9 +43,10 @@
                             <ion-select-option *ngFor="let savedFilteritem of savedFiltersThisDevice" [value]="savedFilteritem.filterID" >{{ savedFilteritem.filterName }}</ion-select-option>
                       </ion-select>
               </ion-item>
-
-
-
+              <ion-item>
+                 <ion-label>Realtime data update</ion-label>
+                  <ion-toggle slot="end"  [(ngModel)]="DataUpdateEnabled"  [checked]="DataUpdateEnabled"  ></ion-toggle>
+              </ion-item>
             </ion-list>
 
 
