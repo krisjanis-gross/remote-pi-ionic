@@ -12,7 +12,7 @@
 <ion-content padding>
    <h3>Sensors</h3>
     <ion-list>
-      <ion-item *ngFor="let item of SensorList" (click)="openSensorData($event, item)">
+      <ion-item *ngFor="let item of SensorList">
         {{item.sensor_name}} : {{item.value}}
       </ion-item>
     </ion-list>
