@@ -69,7 +69,6 @@ export class BackendDataService {
     request_data: ""
   };
 
-
  let API_CALL_URL  = this.ServerURL + this.ServerPath;
  console.log('URL:', API_CALL_URL);
 

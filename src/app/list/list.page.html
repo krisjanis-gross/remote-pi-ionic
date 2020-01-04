@@ -18,6 +18,9 @@
           <h2  (click)="selectDevice($event, item)"  class="item-note">
             {{item.deviceURL}}
           </h2>
+          <h3  (click)="selectDevice($event, item)"  class="item-note">
+            Status: {{this.deviceStatus[item.deviceID]}}
+          </h3>
         </ion-label>
         <ion-button large clear slot="end" (click)="editDevice($event, item)">Edit</ion-button>
      </ion-item>

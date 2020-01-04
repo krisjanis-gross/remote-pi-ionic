@@ -161,14 +161,17 @@ subscription:any;
                                                             //console.log("key " +  key);
                                                             //console.log("index " +  index);
                                                             let sensorID = res.response_data.data[index].id;
+                                                            let sensorName = res.response_data.data[index].sensor_name;
                                                             let sensorValue = res.response_data.data[index].value;
 
                                                             let readingTimestamp = Date.parse(res.response_data.timestamp + ' UTC');
                                                             console.log("res.response_data.timestamp  " +  res.response_data.timestamp);
-                                                            console.log("readingTimestamp " +  readingTimestamp);
+                                                            //console.log("readingTimestamp " +  readingTimestamp);
                                                             //console.log("sensorID " +  sensorID);
+                                                            //console.log("sensorName " +  sensorName);
+
                                                             //console.log("sensorValue " +  sensorValue);
-                                                            var series = this.HistoricDataChart.get(sensorID);
+                                                            var series = this.HistoricDataChart.get(sensorName);
                                                             var value = parseFloat(sensorValue);
                                                             if (series) {
                                                                       series.addPoint([readingTimestamp, value], true, false);
@@ -231,7 +234,7 @@ async select_sensors (event) {
 
    this.selectedFilter = {
     filterID:newFilterID,
-    filterName: 'filter ' + newFilterID + ': ' + this.chart_time_interval + ' ' + this.selected_sensors  ,
+    filterName: '(' + newFilterID + ') ' + this.chart_time_interval + ' ' + this.selected_sensors  ,
     filterPeriod: this.chart_time_interval,
     filtersensorList: this.selected_sensors,
     }

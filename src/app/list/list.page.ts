@@ -6,7 +6,7 @@ import { DeviceDataPage } from '../device-data/device-data.page';
 
 import { Platform } from '@ionic/angular';
 
-
+import { BackendDataService } from '../backend-data.service';
 
 @Component({
   selector: 'app-list',
@@ -19,12 +19,16 @@ export class ListPage implements OnInit {
   selecteditem: any;
   subscription:any;
 
+  deviceStatus = Array ();
+
   constructor(public router: Router,
               public dataService: LocalAppDataService,
+              private backendData: BackendDataService,
                 public platform: Platform,
               )
                {
                  this.dataService.getDeviceList();
+                  setInterval(function(){ this.deviceStatusRefresh();}.bind(this), 5000);
                 }
 
   ngOnInit() {
@@ -56,5 +60,44 @@ export class ListPage implements OnInit {
       this.dataService.saveLocalAppconfig(item);
       this.router.navigate(['/home']);
       }
+
+
+  async deviceStatusRefresh () {
+           //console.log ('List data status refresh initiated : ' );
+           if (this.dataService.deviceList) {
+              console.log ('List data status refresh initiated : ' );
+              Object.keys(this.dataService.deviceList).forEach(function(key,index){
+                    let deviceID = this.dataService.deviceList[index].deviceID;
+                    let deviceURL = this.dataService.deviceList[index].deviceURL;
+                    let deviceKEY = this.dataService.deviceList[index].deviceKEY;
+
+                    console.log ('ping device: ' + deviceID + deviceURL + deviceKEY);
+                    this.deviceStatus[deviceID] = "checking...";
+
+                    this.ping_device(deviceID,deviceURL,deviceKEY);
+
+              }.bind(this));
+
+
+           }
+       }
+
+ async ping_device (deviceID,deviceURL,deviceKEY) {
+   this.backendData.ServerKEY = deviceKEY;
+   this.backendData.ServerURL = deviceURL;
+
+   await this.backendData.checkDeviceVersion()
+     .subscribe(res => {
+     //  console.log(res);
+       // get trigger data.
+       this.deviceStatus[deviceID] = "OK";
+     }, err => {
+       console.log(err);
+       this.deviceStatus[deviceID] = "connection error";
+     });
+
+ }
+
+
 
 }
