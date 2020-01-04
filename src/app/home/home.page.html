@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-title>{{this.AppConfig.deviceTitle}} </ion-title>
     <ion-buttons slot="end">
-       <ion-button   fill="solid"   href="/list" >device list</ion-button>
+       <ion-button   fill="solid"  [routerLink]="['/list']" >device list</ion-button>
     </ion-buttons>
     <ion-progress-bar [hidden]="!any_LOADING" type="indeterminate"></ion-progress-bar>
     <ion-progress-bar [hidden]="any_LOADING" ></ion-progress-bar>
@@ -16,7 +16,7 @@
         {{item.sensor_name}} : {{item.value}}
       </ion-item>
     </ion-list>
-<ion-button size="default"  fill="outline" href="/historic-data" >Historic data <ion-icon name="analytics"></ion-icon> </ion-button>
+<ion-button size="default"  fill="outline"  [routerLink]="['/historic-data']" >Historic data <ion-icon name="analytics"></ion-icon> </ion-button>
 
     <h3>Relays (IO pins)</h3>
     <ion-list>
