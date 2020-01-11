@@ -32,6 +32,10 @@ any_LOADING  = false;
 status_log_stack = [];
 
 subscription:any;
+refreshIntervalID:any;
+
+DeviceConfig:any;
+
 
  constructor(
               //   public navCtrl: NavController,
@@ -63,6 +67,13 @@ async dataRefresh () {
         this.getAppConfig ();
   }
 
+  ionViewDidLeave() {
+      //console.log ('**********************ionViewDidLeave called. ' );
+    if (this.refreshIntervalID) {
+      clearInterval(this.refreshIntervalID);
+    }
+  }
+
 
  ionViewDidEnter(){ this.subscription = this.platform.backButton.subscribe(()=>{ navigator['app'].exitApp(); }); }
  ionViewWillLeave(){ this.subscription.unsubscribe(); }
@@ -82,7 +93,7 @@ async dataRefresh () {
             this.connectToDevice() ;
 
             // enable automatic reload
-               setInterval(function(){ this.dataRefresh();}.bind(this), 5000);
+               this.refreshIntervalID = setInterval(function(){ this.dataRefresh();}.bind(this), 5000);
          }
          else {
            this.router.navigate(['/list']);
@@ -103,7 +114,8 @@ async dataRefresh () {
         this.status_message = "Connected OK";
         this.getRelayData();
         this.getSensorData () ;
-        this.getTriggerData ()
+        this.getTriggerData ();
+        this.getDeviceConfig();
         this.connectedToDevice = true;
 
         this.other_loading = false;
@@ -119,6 +131,27 @@ async dataRefresh () {
 
 
 }
+
+async getDeviceConfig () {
+
+  await this.backendData.gedDeviceConfig()
+    .subscribe(res => {
+      console.log(res);
+    //  console.log(res.response_data);
+      // get trigger data.
+      this.DeviceConfig =  JSON.stringify (res.response_data);
+  //    this.status_message = res.response_data.timestamp;
+
+
+    }, err => {
+      console.log(err);
+
+    });
+
+
+
+}
+
 
 async getSensorData () {
       this.sensors_loading = true;

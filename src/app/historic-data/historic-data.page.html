@@ -14,7 +14,7 @@
        <ion-list>
               <ion-item>
                 <ion-label>Data period</ion-label>
-                     <ion-select interface="alert" [(ngModel)]="chart_time_interval" (ionChange)="change_period()" >
+                     <ion-select interface="popover" [(ngModel)]="chart_time_interval" (ionChange)="change_period()" >
                        <ion-select-option value="hour">hour</ion-select-option>
                        <ion-select-option value="3hrs">3 hours</ion-select-option>
                        <ion-select-option value="6hrs">6 hours</ion-select-option>
@@ -26,20 +26,20 @@
               </ion-item>
               <ion-item>
                 <ion-label>Select Sensors</ion-label>
-                <ion-select multiple="true" interface="alert" cancelText="Nah" okText="Ok" (ionChange)="select_sensors($event)" [(ngModel)]="selected_sensors">
+                <ion-select multiple="true" interface="popover" cancelText="Nah" okText="Ok" (ionChange)="select_sensors($event)" [(ngModel)]="selected_sensors">
                   <ion-select-option *ngFor="let item of SensorList" [value]="item.id">{{ item.name }}</ion-select-option>
                 </ion-select>
               </ion-item>
 
               <ion-item>
                 <ion-label>Save filter</ion-label>
-                     <ion-select interface="alert" (ionChange)="saveFilterSelection()"  [(ngModel)]="safeFilterSelectedID"  >
+                     <ion-select interface="popover" (ionChange)="saveFilterSelection()"  [(ngModel)]="safeFilterSelectedID"  >
                           <ion-select-option *ngFor="let savedFilteritem of savedFiltersThisDeviceSAVEList" [value]="savedFilteritem.filterID">{{ savedFilteritem.filterName }}</ion-select-option>
                      </ion-select>
               </ion-item>
               <ion-item>
                      <ion-label>Load filter</ion-label>
-                          <ion-select interface="alert" (ionChange)="loadSelectedFilter()"  [(ngModel)]="loadFilterSelectedID">
+                          <ion-select interface="popover" (ionChange)="loadSelectedFilter()"  [(ngModel)]="loadFilterSelectedID">
                             <ion-select-option *ngFor="let savedFilteritem of savedFiltersThisDevice" [value]="savedFilteritem.filterID" >{{ savedFilteritem.filterName }}</ion-select-option>
                       </ion-select>
               </ion-item>

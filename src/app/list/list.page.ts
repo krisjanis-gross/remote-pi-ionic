@@ -20,20 +20,29 @@ export class ListPage implements OnInit {
   subscription:any;
 
   deviceStatus = Array ();
-
+  deviceStatusColor = Array ();
+  refreshIntervalID :any;
   constructor(public router: Router,
               public dataService: LocalAppDataService,
               private backendData: BackendDataService,
-                public platform: Platform,
+              public platform: Platform,
               )
                {
                  this.dataService.getDeviceList();
-                  setInterval(function(){ this.deviceStatusRefresh();}.bind(this), 5000);
+                 //this.deviceStatusRefresh();
+                 this.refreshIntervalID = setInterval(function(){ this.deviceStatusRefresh();}.bind(this), 5000);
                 }
 
   ngOnInit() {
   }
 
+
+  ionViewDidLeave() {
+      //console.log ('**********************ionViewDidLeave called. ' );
+    if (this.refreshIntervalID) {
+      clearInterval(this.refreshIntervalID);
+    }
+  }
 
   ionViewDidEnter(){ this.subscription = this.platform.backButton.subscribe(()=>{  this.router.navigate(['/']) /*navigator['app'].exitApp();*/     }); }
   ionViewWillLeave(){ this.subscription.unsubscribe(); }
@@ -58,7 +67,7 @@ export class ListPage implements OnInit {
 
   selectDevice(event, item) {
       this.dataService.saveLocalAppconfig(item);
-      this.router.navigate(['/home']);
+      this.router.navigate(['/']);
       }
 
 
@@ -71,8 +80,8 @@ export class ListPage implements OnInit {
                     let deviceURL = this.dataService.deviceList[index].deviceURL;
                     let deviceKEY = this.dataService.deviceList[index].deviceKEY;
 
-                    console.log ('ping device: ' + deviceID + deviceURL + deviceKEY);
-                    this.deviceStatus[deviceID] = "checking...";
+                    //console.log ('ping device: ' + deviceID + deviceURL + deviceKEY);
+                    //this.deviceStatus[deviceID] = "checking...";
 
                     this.ping_device(deviceID,deviceURL,deviceKEY);
 
@@ -90,10 +99,12 @@ export class ListPage implements OnInit {
      .subscribe(res => {
      //  console.log(res);
        // get trigger data.
-       this.deviceStatus[deviceID] = "OK";
+       this.deviceStatus[deviceID] = "Connection OK";
+       this.deviceStatusColor[deviceID] = "success";
      }, err => {
        console.log(err);
-       this.deviceStatus[deviceID] = "connection error";
+       this.deviceStatus[deviceID] = "Connection error";
+       this.deviceStatusColor[deviceID] = "warning";
      });
 
  }

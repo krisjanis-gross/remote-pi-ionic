@@ -40,6 +40,8 @@ DataUpdateEnabled = true;
 last_timestamp = "";
 subscription:any;
 
+refreshIntervalID:any;
+
   constructor(
     public loadingController: LoadingController,
     private backendData: BackendDataService,
@@ -64,7 +66,7 @@ subscription:any;
                     this.backendData.ServerKEY = this.AppConfig.deviceKEY;
                     this.getChartData () ;
                     this.loadSavedFilters();
-                    setInterval(function()
+                    this.refreshIntervalID = setInterval(function()
                                           { this.getChartIncrementalData();
                                           }.bind(this),
                                  1000);
@@ -75,6 +77,13 @@ subscription:any;
 
   ionViewDidEnter(){ this.subscription = this.platform.backButton.subscribe(()=>{  this.router.navigate(['/']) /*navigator['app'].exitApp();*/     }); }
   ionViewWillLeave(){ this.subscription.unsubscribe(); }
+
+  ionViewDidLeave() {
+      //console.log ('**********************ionViewDidLeave called. ' );
+    if (this.refreshIntervalID) {
+      clearInterval(this.refreshIntervalID);
+    }
+  }
 
 
   async getChartData () {
@@ -165,13 +174,14 @@ subscription:any;
                                                             let sensorValue = res.response_data.data[index].value;
 
                                                             let readingTimestamp = Date.parse(res.response_data.timestamp + ' UTC');
-                                                            console.log("res.response_data.timestamp  " +  res.response_data.timestamp);
+                                                            //console.log("res.response_data.timestamp  " +  res.response_data.timestamp);
+                                                            //console.log("adding point to graph:  " +  sensorName);
                                                             //console.log("readingTimestamp " +  readingTimestamp);
                                                             //console.log("sensorID " +  sensorID);
                                                             //console.log("sensorName " +  sensorName);
 
                                                             //console.log("sensorValue " +  sensorValue);
-                                                            var series = this.HistoricDataChart.get(sensorName);
+                                                            var series = this.HistoricDataChart.get(sensorID);
                                                             var value = parseFloat(sensorValue);
                                                             if (series) {
                                                                       series.addPoint([readingTimestamp, value], true, false);

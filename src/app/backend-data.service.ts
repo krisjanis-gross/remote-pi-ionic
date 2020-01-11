@@ -80,6 +80,25 @@ export class BackendDataService {
 
 
 
+gedDeviceConfig(): Observable<any> {
+
+let post_parameters = {
+  API_key : this.ServerKEY,
+  request_action: "getDeviceConfig",
+  request_data: ""
+};
+
+let API_CALL_URL  = this.ServerURL + this.ServerPath;
+console.log('URL:', API_CALL_URL);
+
+return this.http.post(API_CALL_URL,  post_parameters , this.httpOptions).pipe(
+  map(this.extractData),
+  catchError(this.handleError));
+}
+
+
+
+
   getRealtimeData() {
     let post_parameters = {
       API_key : this.ServerKEY,
