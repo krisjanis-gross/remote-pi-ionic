@@ -262,6 +262,58 @@ toggleTriggerState (triggerID,newState): Observable<any>  {
 }
 
 
+setPinConfig (pinID,newPinId,pinDescription): Observable<any>  {
+
+
+
+  let post_parameters = {
+    API_key : this.ServerKEY,
+    request_action: "setPinConfig",
+    request_data: {
+    pinID : pinID,
+    newPinId: newPinId,
+    pinDescription: pinDescription,
+    }
+  };
+
+  let API_CALL_URL  = this.ServerURL + this.ServerPath;
+  //console.log(' set_trigger_state  URL:', API_CALL_URL);
+
+   return this.http.post(API_CALL_URL,  post_parameters , this.httpOptions).pipe(
+     map(this.extractData),
+     catchError(this.handleError));
+
+}
+
+setSensorName (sensorID,sensorName): Observable<any>  {
+
+  let post_parameters = {
+    API_key : this.ServerKEY,
+    request_action: "setSensorName",
+    request_data: {
+    sensorID : sensorID,
+    sensorName: sensorName,
+    }
+  };
+
+  let API_CALL_URL  = this.ServerURL + this.ServerPath;
+  //console.log(' set_trigger_state  URL:', API_CALL_URL);
+
+   return this.http.post(API_CALL_URL,  post_parameters , this.httpOptions).pipe(
+     map(this.extractData),
+     catchError(this.handleError));
+
+}
+
+
+
+
+
+
+
+
+
+
 
 
 getTriggerData(): Observable<any> {

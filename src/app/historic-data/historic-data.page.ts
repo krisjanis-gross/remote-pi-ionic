@@ -219,11 +219,11 @@ async getSensorList () {
 
 
 async select_sensors (event) {
-  //  console.log(this.selected_sensors);
+  //  console.log(JSON.stringify(event.name) );
+
+  //  console.log(event.detail.value);
     this.getChartData () ;
 }
-
-
 
 
 

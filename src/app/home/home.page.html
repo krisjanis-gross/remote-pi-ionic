@@ -12,7 +12,7 @@
 <ion-content padding>
    <h3>Sensors</h3>
     <ion-list>
-      <ion-item *ngFor="let item of SensorList">
+      <ion-item *ngFor="let item of SensorList" (click)="editSensor(item)" >
         {{item.sensor_name}} : {{item.value}}
       </ion-item>
     </ion-list>
@@ -21,8 +21,11 @@
     <h3>Relays (IO pins)</h3>
     <ion-list>
       <ion-item *ngFor="let item of RelayList" >
-        <ion-label>{{item.description}} </ion-label>
+        <ion-label (click)="editPin(item)">{{item.description}} </ion-label>
           <ion-toggle slot="end" [disabled]="item.locked" [(ngModel)]="item.state"  [checked]="item.state" (ionChange)="setRelayValue(item)"  ></ion-toggle>
+      </ion-item>
+      <ion-item>
+          <ion-button size="default"  fill="outline" (click)="editPinOverlay(0,'')"  >Configure new PIN</ion-button>
       </ion-item>
     </ion-list>
 

@@ -26,7 +26,7 @@
               </ion-item>
               <ion-item>
                 <ion-label>Select Sensors</ion-label>
-                <ion-select multiple="true" interface="popover" cancelText="Nah" okText="Ok" (ionChange)="select_sensors($event)" [(ngModel)]="selected_sensors">
+                <ion-select multiple="true" cancelText="Nah" okText="Ok" (ionChange)="select_sensors($event)" [(ngModel)]="selected_sensors">
                   <ion-select-option *ngFor="let item of SensorList" [value]="item.id">{{ item.name }}</ion-select-option>
                 </ion-select>
               </ion-item>

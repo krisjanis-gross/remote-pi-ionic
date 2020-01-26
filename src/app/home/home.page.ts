@@ -18,7 +18,7 @@ export class HomePage {
  targetDeviceName: string;
  AppConfig = {deviceID:0, deviceTitle: "", deviceURL: "", deviceKEY: ""};
  RelayList: Array<{id: string; state: string, locked: string, description:string}>;
- SensorList: Array<{sensor_name:string, value:string}>;
+ SensorList: Array<{id:string, sensor_name:string, value:string}>;
  TriggerList: Array<{triggerID:string, state:string, description:string, parameters:Array<{name:string,par_value:string}>}>;
 
 connectedToDevice = false;
@@ -106,6 +106,8 @@ async dataRefresh () {
   async connectToDevice () {
     this.other_loading = true;
     this.update_loading ();
+    // reset page data
+    this.clearPage();
     this.status_log_stack.push('connectToDevice. URL=' + this.backendData.ServerURL);
     await this.backendData.checkDeviceVersion()
       .subscribe(res => {
@@ -126,9 +128,20 @@ async dataRefresh () {
         this.status_message = "connection error";
         this.other_loading = false;
         this.update_loading ();
+
+
       });
 
 
+
+}
+
+clearPage () {
+  this.RelayList = [];
+  this.SensorList = [];
+  this.TriggerList = [];
+  this.DeviceConfig = "";
+  //console.log('------------------- Clear page called  :' );
 
 }
 
@@ -171,6 +184,7 @@ async getSensorData () {
           console.log(err);
            this.sensors_loading = false;
            this.update_loading ();
+           this.SensorList = [];
         });
 
 
@@ -189,6 +203,7 @@ async getRelayData () {
           console.log(err);
           this.relays_loading = false;
           this.update_loading ();
+          this.RelayList = [];
         });
       }
 
@@ -248,6 +263,7 @@ async getTriggerData () {
           console.log(err);
           this.triggers_loading = false;
           this.update_loading ();
+          this.TriggerList = [];
         });
       }
 
@@ -330,4 +346,122 @@ async getTriggerData () {
 
   }
 
+
+editPin (relayItem) {
+//  console.log('------------------- EDIT PIN   :' + relayItem.id);
+  this.editPinOverlay(relayItem.id,relayItem.description);
+//  RelayList: Array<{id: string; state: string, locked: string, description:string}>;
+}
+
+
+async editPinOverlay(PinID,PinName) {
+  const alert = await this.alertController.create({
+     header:  "Edit IO PIN",
+     message: 'ID = ' + PinID + '  value = ' + PinName + '<br/>  <a target="_new" href="https://www.raspberrypi.org/documentation/usage/gpio/">GPIO wiring details</a>  ',
+     inputs: [
+              {
+                name: 'PinIDNew',
+                type: 'text',
+                placeholder: 'Pin number',
+                value: PinID,
+              },
+              {
+                name: 'PinName',
+                type: 'text',
+                placeholder: 'Pin name',
+                value: PinName,
+              },
+            ],
+     buttons: [
+       {
+         text: 'Cancel',
+         role: 'cancel',
+         cssClass: 'secondary',
+         handler: (blah) => {
+          // console.log('Confirm Cancel: blah');
+         }
+       }, {
+         text: 'Okay',
+         handler: (NewValue) => {
+           //console.log('Edit Pin' + PinID + NewValue.PinIDNew + NewValue.PinName);
+           this.backendData.setPinConfig(PinID, NewValue.PinIDNew, NewValue.PinName)
+             .subscribe(res => {
+               console.log(res);
+               this.other_loading = false;
+               this.update_loading ();
+               this.getRelayData;
+             }, err => {
+               console.log(err);
+               this.other_loading = false;
+               this.update_loading ();
+             });
+
+          // this.backendData.setParameterValue(ParameterId,NewValue.NewValue)
+            //       .subscribe(res => {
+            //          this.getTriggerData ();
+          //         });
+         }
+       }
+     ]
+   });
+
+   await alert.present();
   }
+
+
+
+
+  editSensor (sensorItem) {
+    console.log('------------------- EDIT sensor    :' +  sensorItem.sensor_name  +   sensorItem.id  );
+
+    this.editSensorOverlay(sensorItem.id,sensorItem.sensor_name);
+
+  }
+
+async editSensorOverlay (id,sensorName) {
+
+  const alert = await this.alertController.create({
+     header:  "Edit Sensor Name",
+     message: 'ID = ' + id + '<br>name = ' + sensorName,
+     inputs: [
+              {
+                name: 'SensorNameNew',
+                type: 'text',
+                placeholder: 'Sensor Name',
+                value: sensorName,
+              },
+            ],
+     buttons: [
+       {
+         text: 'Cancel',
+         role: 'cancel',
+         cssClass: 'secondary',
+         handler: (blah) => {
+          // console.log('Confirm Cancel: blah');
+         }
+       }, {
+         text: 'Okay',
+         handler: (NewValue) => {
+           //console.log('Edit Pin' + PinID + NewValue.PinIDNew + NewValue.PinName);
+           this.backendData.setSensorName(id, NewValue.SensorNameNew)
+             .subscribe(res => {
+               console.log(res);
+               this.other_loading = false;
+               this.update_loading ();
+               this.getSensorData;
+             }, err => {
+               console.log(err);
+               this.other_loading = false;
+               this.update_loading ();
+             });
+         }
+       }
+     ]
+   });
+
+   await alert.present();
+
+}
+
+
+}

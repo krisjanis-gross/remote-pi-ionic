@@ -30,7 +30,7 @@ export class ListPage implements OnInit {
                {
                  this.dataService.getDeviceList();
                  //this.deviceStatusRefresh();
-                 this.refreshIntervalID = setInterval(function(){ this.deviceStatusRefresh();}.bind(this), 5000);
+                 this.refreshIntervalID = setInterval(function(){ this.deviceStatusRefresh();}.bind(this), 3000);
                 }
 
   ngOnInit() {
@@ -74,7 +74,7 @@ export class ListPage implements OnInit {
   async deviceStatusRefresh () {
            //console.log ('List data status refresh initiated : ' );
            if (this.dataService.deviceList) {
-              console.log ('List data status refresh initiated : ' );
+            //  console.log ('List data status refresh initiated : ' );
               Object.keys(this.dataService.deviceList).forEach(function(key,index){
                     let deviceID = this.dataService.deviceList[index].deviceID;
                     let deviceURL = this.dataService.deviceList[index].deviceURL;
